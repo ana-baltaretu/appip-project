@@ -1,11 +1,7 @@
-import os.path
-
-import cv2
-from my_helpers import MyImageHelpers
 from my_configuration import *
+from my_helpers import MyImageHelpers
 from my_map_generators import *
 from my_texture_application import *
-
 
 def generate_folder_structure():
     for folder in folder_names:
@@ -23,12 +19,12 @@ def read_all_inputs():
         texture_image = cv2.imread(input_texture_path)
         print("Read texture of size:", texture_image.shape)
         normal_image = cv2.imread(input_normal_map)
-        specularity_image = cv2.imread(input_specularity_map)
-        return input_image, mask_image, texture_image, normal_image, specularity_image
+        return input_image, mask_image, texture_image, normal_image
     except:
         print("Error: Make sure to add your input image in [../input/images/], "
               "input mask in [../input/masks/] and input texture in [../input/textures/]")
     return None, None, None, None, None
+
 
 def write_latest_run(src_img, normal_map, specularity_map, applied_texture):
     cv2.imwrite(latest_run_source, src_img)
@@ -37,16 +33,27 @@ def write_latest_run(src_img, normal_map, specularity_map, applied_texture):
     cv2.imwrite(latest_run_applied_texture, applied_texture)
 
 
+def apply_masking(input_image, mask_image):
+    masked_object = np.zeros(input_image.shape)
+    masked_pixels = np.where(mask_image > 0)
+    masked_object[masked_pixels] = input_image[masked_pixels]
+    return masked_object
+
+
 if __name__ == '__main__':
     generate_folder_structure()
 
     # Reading
-    input_image, mask_image, texture_image, normal_image, specularity_image = read_all_inputs()
-    MyImageHelpers(input_image).show_smaller_image()
+    input_image, mask_image, texture_image, normal_image = read_all_inputs()
+    masked_object = apply_masking(input_image, mask_image)
+
+    generate_intensity_map(masked_object)
+    specularity_image = generate_specularity_map(masked_object)
+    # MyImageHelpers(input_image).show_smaller_image()
 
     resulting_image = apply_new_texture(input_image, mask_image, texture_image)
 
     cv2.imwrite(output_applied_texture, resulting_image)
     write_latest_run(input_image, normal_image, specularity_image, resulting_image)
 
-    MyImageHelpers(resulting_image).show_smaller_image()
+    # MyImageHelpers(resulting_image).show_smaller_image()
