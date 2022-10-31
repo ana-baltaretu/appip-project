@@ -35,6 +35,7 @@ class MyImageHelpers:
         width = int(self.img.shape[1] * times)
         height = int(self.img.shape[0] * times)
         self.resized_image = cv2.resize(self.img, (width, height), interpolation=cv2.INTER_AREA)
+        return self.resized_image
 
     def show_smaller_image(self):
         self.resize_image(-5)
