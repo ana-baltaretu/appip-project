@@ -1,6 +1,7 @@
 import os
 import cv2
 import numpy as np
+from scipy.ndimage.filters import convolve
 
 
 folder_names = ["../input/", "../output/", "../input/images/", "../input/textures/",
@@ -17,11 +18,10 @@ input_images_path = "../input/images/" + image_name
 input_texture_path = "../input/textures/" + texture_name
 input_masks_path = "../input/masks/" + mask_name
 input_normal_map = "../output/normal_maps/" + normal_map_name
-input_specularity_map = "../output/specularity_maps/" + specularity_map_name
+output_specularity_map = "../output/specularity_maps/" + specularity_map_name
 
 output_intensity_avg = "../output/intensities/avg_" + image_name
 output_intensity_spec = "../output/intensities/spec_" + image_name
-# output_intensity_max = "../output/intensities/max_" + image_name
 output_normal_map = "../output/normal_maps/" + image_name
 output_applied_texture = "../output/applied_textures/" + image_name[:(len(image_name) - 3)] + "_" + texture_name
 
