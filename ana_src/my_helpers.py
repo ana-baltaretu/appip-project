@@ -21,7 +21,7 @@ class MyImageHelpers:
         else:
             print("image wasn't resized yet!")
 
-    def resize_image(self, times):
+    def resize_image(self, times, interpolation=cv2.INTER_AREA):
         """
         Resizes an image 'times' larger or smaller, uses interpolation to not mess it up
         :param img: the image you want to resize
@@ -34,7 +34,7 @@ class MyImageHelpers:
             times = 1 / (-times)
         width = int(self.img.shape[1] * times)
         height = int(self.img.shape[0] * times)
-        self.resized_image = cv2.resize(self.img, (width, height), interpolation=cv2.INTER_AREA)
+        self.resized_image = cv2.resize(self.img, (width, height), interpolation)
         return self.resized_image
 
     def show_smaller_image(self):

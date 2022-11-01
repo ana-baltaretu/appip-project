@@ -1,4 +1,5 @@
 from my_configuration import *
+from my_helpers import MyImageHelpers
 
 
 def generate_intensity_map(source_image):
@@ -41,9 +42,13 @@ def apply_sobel(intensity_map):
                         [-1, -2, -1]], np.float64)
 
     output_x = convolve(intensity_map.copy(), sobel_x)
-    output_x = output_x / np.max(np.abs(output_x)) * 255.0
+    output_x[np.where(output_x < -255.0)] = -255.0
+    output_x[np.where(output_x > 255.0)] = 255.0
+    # output_x = output_x / np.max(output_x) * 255.0
     output_y = convolve(intensity_map.copy(), sobel_y)
-    output_y = output_y / np.max(np.abs(output_y)) * 255.0
+    output_y[np.where(output_y < -255.0)] = -255.0
+    output_y[np.where(output_y > 255.0)] = 255.0
+    # output_y = output_y / np.max(output_y) * 255.0
 
     # Default color for normal maps is this purple pixel: BGR(255, 127.5, 127.5)
     # Put calculated gradients in the correct color channels (and fill blue channel)
@@ -54,13 +59,46 @@ def apply_sobel(intensity_map):
     return filtered_map
 
 
-def generate_normal_map(intensity_map):
+# Similar algorithm to "soft light" from Photoshop,
+# see https://photoshoptrainingchannel.com/blending-modes-explained/
+def blend_soft_light(src_1, src_2):
+    image1 = src_1.copy().astype(np.uint8)
+    image2 = src_2.copy().astype(np.uint8)
+    result = np.zeros(image1.shape)
+
+    pixels_case_1 = np.where(2.0 * image2 < 255.0)
+    pixels_case_2 = np.where(2.0 * image2 >= 255.0)
+
+    result[pixels_case_1] = ((image1[pixels_case_1] + 127.5) * image2[pixels_case_1]) / 255.0
+    result[pixels_case_2] = 255.0 - ((382.5 - image1[pixels_case_2]) * (255.0 - image2[pixels_case_2]) / 255.0)
+
+    return result.astype(np.uint8)
+
+
+# large_detail_scale
+def generate_normal_map(intensity_map, keep_large_detail=True, large_detail_scale=-3):
     filtered_map = apply_sobel(intensity_map)
 
     # Converting from [-255,255] to [0,255]
-    normal_map = ((filtered_map + 255.0) / 2.0).astype(np.uint64)
+    normal_map = ((filtered_map + 255.0) / 2.0).astype(np.uint8)
+
+    # If we want to keep the general geometry in mind we would want to keep the large details
+    if keep_large_detail is True:
+        # Make a downscaled image
+        downscaled_intensity_map = MyImageHelpers(intensity_map).resize_image(large_detail_scale)
+
+        # Make small
+        downscaled_normal_map = generate_normal_map(downscaled_intensity_map, keep_large_detail=False)
+
+        # Make back to big but without nice interpolation (so it's a bit chunky)
+        rescaled_normal_map = MyImageHelpers(downscaled_normal_map).resize_image(-large_detail_scale, interpolation=cv2.INTER_CUBIC)
+
+        # Blend downscaled image with the normal one
+        normal_map = blend_soft_light(normal_map, rescaled_normal_map)
 
     # Write
     cv2.imwrite(output_normal_map, normal_map)
-    return
+    return normal_map
+
+
 

@@ -50,9 +50,6 @@ def write_latest_run(src_img, normal_map, specularity_map, applied_texture):
     cv2.imwrite(latest_run_applied_texture, applied_texture)
 
 
-
-
-
 if __name__ == '__main__':
     generate_folder_structure()
 
