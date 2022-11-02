@@ -83,6 +83,8 @@ if __name__ == '__main__':
     # Check shape and maybe fixes
     final_image = cv2.imread(final_applied_maps)
     w1, h1, c1 = resulting_image.shape
+
+    print("Inpute these in Blender: " + str(w1) + ", " + str(h1))
     w2, h2, c2 = final_image.shape
     apply_textured_object(input_image, final_image, mask_image)
 
