@@ -50,6 +50,14 @@ def write_latest_run(src_img, normal_map, specularity_map, applied_texture):
     cv2.imwrite(latest_run_applied_texture, applied_texture)
 
 
+def apply_textured_object(input_image, final_image, mask_image):
+    result_image = input_image.copy()
+    masked_pixels = np.where(mask_image > 0)
+    result_image[masked_pixels] = final_image[masked_pixels]
+    cv2.imwrite(result_image_path, result_image)
+    return
+
+
 if __name__ == '__main__':
     generate_folder_structure()
 
@@ -65,10 +73,17 @@ if __name__ == '__main__':
     # Replacing object material with texture
     resulting_image = apply_new_texture(input_image, mask_image, texture_image)
 
-    # Blender stuff
-    # TODO: import bpy and all the magic
-
     # Writing
     cv2.imwrite(output_applied_texture, resulting_image)
     write_latest_run(input_image, normal_image, specularity_image, resulting_image)
+
+    # Blender stuff
+    # TODO: import bpy and all the magic
+
+    # Check shape and maybe fixes
+    final_image = cv2.imread(final_applied_maps)
+    w1, h1, c1 = resulting_image.shape
+    w2, h2, c2 = final_image.shape
+    apply_textured_object(input_image, final_image, mask_image)
+
     # MyImageHelpers(resulting_image).show_smaller_image()
