@@ -45,8 +45,9 @@ def generate_maps(masked_object):
     return specularity_image, normal_image
 
 
-def write_latest_run(src_img, normal_map, specularity_map, applied_texture):
+def write_latest_run(src_img, mask, normal_map, specularity_map, applied_texture):
     cv2.imwrite(latest_run_source, src_img)
+    cv2.imwrite(latest_run_mask, mask)
     cv2.imwrite(latest_run_normal_map, normal_map)
     cv2.imwrite(latest_run_specularity_map, specularity_map)
     cv2.imwrite(latest_run_applied_texture, applied_texture)
@@ -70,7 +71,7 @@ if __name__ == '__main__':
 
     # Writing
     cv2.imwrite(output_applied_texture, resulting_image)
-    write_latest_run(input_image, normal_image, specularity_image, resulting_image)
+    write_latest_run(input_image, mask_image, normal_image, specularity_image, resulting_image)
 
     # Blender stuff
     # TODO: GO TO BLENDER PROJECT NOW

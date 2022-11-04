@@ -26,10 +26,12 @@ output_normal_map = "../output/normal_maps/" + image_name
 output_applied_texture = "../output/applied_textures/" + image_name[:(len(image_name) - 3)] + "_" + texture_name
 
 latest_run_source = "../output/latest_run/1_source.jpg"
-latest_run_normal_map = "../output/latest_run/2_normal_map.jpg"
-latest_run_specularity_map = "../output/latest_run/3_specularity_map.jpg"
-latest_run_applied_texture = "../output/latest_run/4_applied_texture.jpg"
-
+latest_run_mask = "../output/latest_run/2_mask.png"
+latest_run_normal_map = "../output/latest_run/3_normal_map.jpg"
+latest_run_specularity_map = "../output/latest_run/4_specularity_map.jpg"
+latest_run_applied_texture = "../output/latest_run/5_applied_texture.jpg"
+latest_run_blender_output = "../output/latest_run/6_blender_output.jpg"
+latest_run_results = "../output/latest_run/7_results.jpg"
 
 final_applied_name = "vase_waves.jpg"  # "nefertiti_waves_with_specularity-rendered_final.jpg"
 final_applied_maps = "../output/final/" + final_applied_name
