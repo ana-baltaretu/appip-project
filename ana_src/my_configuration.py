@@ -8,9 +8,9 @@ folder_names = ["../input/", "../output/", "../input/images/", "../input/texture
                 "../input/masks/", "../output/normal_maps/", "../output/specularity_maps/",
                 "../output/intensities/", "../output/applied_textures/", "../output/latest_run"]
 
-image_name = "nefertitti.png"
-texture_name = "ana.jpg"
-mask_name = "nefertitti_hat_no_background.png"
+image_name = "vase.jpg"  # nefertitti.png
+texture_name = "waves.jpg"
+mask_name = "my_vase.png"  # "nefertitti_hat_no_background.png
 normal_map_name = "nefertitti_hat_no_background_normal.png"
 specularity_map_name = "nefertitti_hat_no_background_spec.png"
 
@@ -30,6 +30,8 @@ latest_run_normal_map = "../output/latest_run/2_normal_map.jpg"
 latest_run_specularity_map = "../output/latest_run/3_specularity_map.jpg"
 latest_run_applied_texture = "../output/latest_run/4_applied_texture.jpg"
 
-final_applied_maps = "../output/final/nefertiti_waves_with_specularity-rendered_final.jpg"
+
+final_applied_name = "vase_waves.jpg"  # "nefertiti_waves_with_specularity-rendered_final.jpg"
+final_applied_maps = "../output/final/" + final_applied_name
 result_image_path = "../output/results/" + image_name[:(len(image_name) - 3)] + "_" + texture_name
 

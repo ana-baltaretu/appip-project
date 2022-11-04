@@ -14,8 +14,10 @@ def generate_folder_structure():
 def read_all_inputs():
     try:
         input_image = cv2.imread(input_images_path)
+        input_image = MyImageHelpers(input_image).resize_image(4)
         print("Read input image of size:", input_image.shape)
         mask_image = cv2.imread(input_masks_path)
+        mask_image = MyImageHelpers(mask_image).resize_image(4)
         print("Read mask of size:", mask_image.shape)
         texture_image = cv2.imread(input_texture_path)
         print("Read texture of size:", texture_image.shape)
