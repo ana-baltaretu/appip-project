@@ -14,10 +14,10 @@ def generate_folder_structure():
 def read_all_inputs():
     try:
         input_image = cv2.imread(input_images_path)
-        input_image = MyImageHelpers(input_image).resize_image(4)
+        # input_image = MyImageHelpers(input_image).resize_image(4)
         print("Read input image of size:", input_image.shape)
         mask_image = cv2.imread(input_masks_path)
-        mask_image = MyImageHelpers(mask_image).resize_image(4)
+        # mask_image = MyImageHelpers(mask_image).resize_image(4)
         print("Read mask of size:", mask_image.shape)
         texture_image = cv2.imread(input_texture_path)
         print("Read texture of size:", texture_image.shape)
@@ -30,6 +30,7 @@ def read_all_inputs():
 
 def apply_masking(input_image, mask_image):
     masked_object = np.zeros(input_image.shape)
+    print(input_image.shape)
     masked_pixels = np.where(mask_image > 0)
     masked_object[masked_pixels] = input_image[masked_pixels]
     return masked_object
@@ -45,9 +46,11 @@ def generate_maps(masked_object):
     return specularity_image, normal_image
 
 
-def write_latest_run(src_img, mask, normal_map, specularity_map, applied_texture):
+def write_latest_run(src_img, mask, texture_image,
+                     normal_map, specularity_map, applied_texture):
     cv2.imwrite(latest_run_source, src_img)
     cv2.imwrite(latest_run_mask, mask)
+    cv2.imwrite(latest_run_texture, texture_image)
     cv2.imwrite(latest_run_normal_map, normal_map)
     cv2.imwrite(latest_run_specularity_map, specularity_map)
     cv2.imwrite(latest_run_applied_texture, applied_texture)
@@ -71,7 +74,8 @@ if __name__ == '__main__':
 
     # Writing
     cv2.imwrite(output_applied_texture, resulting_image)
-    write_latest_run(input_image, mask_image, normal_image, specularity_image, resulting_image)
+    write_latest_run(input_image, mask_image, texture_image,
+                     normal_image, specularity_image, resulting_image)
 
     # Blender stuff
     # TODO: GO TO BLENDER PROJECT NOW

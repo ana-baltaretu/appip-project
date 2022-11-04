@@ -3,7 +3,7 @@ from my_helpers import MyImageHelpers
 
 
 def generate_intensity_map(source_image):
-    intensity_map = np.sum(source_image, axis=2) / 3  # AVG on the color channels
+    intensity_map = np.max(source_image, axis=2)  # AVG on the color channels
     cv2.imwrite(output_intensity_avg, intensity_map)
     return
 
