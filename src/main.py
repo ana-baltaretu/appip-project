@@ -14,10 +14,10 @@ def generate_folder_structure():
 def read_all_inputs():
     try:
         input_image = cv2.imread(input_images_path)
-        # input_image = MyImageHelpers(input_image).resize_image(4)
+        input_image = MyImageHelpers(input_image).resize_image(4)  # For "vase.jpg" needs to be larger
         print("Read input image of size:", input_image.shape)
         mask_image = cv2.imread(input_masks_path)
-        # mask_image = MyImageHelpers(mask_image).resize_image(4)
+        mask_image = MyImageHelpers(mask_image).resize_image(4)  # For "vase.jpg" needs to be larger
         print("Read mask of size:", mask_image.shape)
         texture_image = cv2.imread(input_texture_path)
         print("Read texture of size:", texture_image.shape)
@@ -37,10 +37,13 @@ def apply_masking(input_image, mask_image):
 
 
 def generate_maps(masked_object):
+    # Generates intensity, specularity and normals
     generate_intensity_map(masked_object)
     intensity_map = cv2.imread(output_intensity_avg, cv2.IMREAD_GRAYSCALE)
+
     generate_specularity_map(intensity_map)
     specularity_image = cv2.imread(output_specularity_map, cv2.IMREAD_GRAYSCALE)
+
     generate_normal_map(intensity_map)
     normal_image = cv2.imread(output_normal_map)
     return specularity_image, normal_image
@@ -48,6 +51,7 @@ def generate_maps(masked_object):
 
 def write_latest_run(src_img, mask, texture_image,
                      normal_map, specularity_map, applied_texture):
+    # Write everything in the latest run folder
     cv2.imwrite(latest_run_source, src_img)
     cv2.imwrite(latest_run_mask, mask)
     cv2.imwrite(latest_run_texture, texture_image)

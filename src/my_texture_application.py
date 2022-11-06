@@ -14,8 +14,8 @@ def apply_new_texture(image, object_mask, texture_map):
     texture_pixels = x_coords, y_coords, texture_pixels[2]
     w_img, h_img, c_img = image.shape
     w_text, h_text, c_text = texture_map.shape
-    scale_x = (max(x_coords) - w_text + 1) / w_text
-    scale_y = (max(y_coords) - h_text + 1) / h_text
+    scale_x = (max(x_coords) - w_text + 2) / w_text
+    scale_y = (max(y_coords) - h_text + 2) / h_text
 
     if w_img > w_text or h_img > h_text:
         texture_map = MyImageHelpers(texture_map).resize_image(1 + max(scale_x, scale_y))

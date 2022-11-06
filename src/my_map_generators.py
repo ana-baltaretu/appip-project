@@ -8,7 +8,7 @@ def generate_intensity_map(source_image):
     return
 
 
-def generate_specularity_map(intensity_map, contrast=1.6, brightness=0.55):
+def generate_specularity_map(intensity_map, contrast=1.9, brightness=0.8):
     intensity_map = intensity_map.astype(np.float64)
     intensity_map *= brightness
 
@@ -44,11 +44,10 @@ def apply_sobel(intensity_map):
     output_x = convolve(intensity_map.copy(), sobel_x)
     output_x[np.where(output_x < -255.0)] = -255.0
     output_x[np.where(output_x > 255.0)] = 255.0
-    # output_x = output_x / np.max(output_x) * 255.0
+
     output_y = convolve(intensity_map.copy(), sobel_y)
     output_y[np.where(output_y < -255.0)] = -255.0
     output_y[np.where(output_y > 255.0)] = 255.0
-    # output_y = output_y / np.max(output_y) * 255.0
 
     # Default color for normal maps is this purple pixel: BGR(255, 127.5, 127.5)
     # Put calculated gradients in the correct color channels (and fill blue channel)
